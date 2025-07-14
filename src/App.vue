@@ -1,42 +1,44 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed } from 'vue';
 
-const songs = ref(['First song', 'Second song', 'Third song', 'Fourth song', 'Fifth song'])
-const isShuffling = ref(false)
-const inputVal = ref(null)
-const timer = ref(null)
+const songs = ref(['First song', 'Second song', 'Third song', 'Fourth song', 'Fifth song']);
+const isShuffling = ref(false);
+const inputVal = ref(null);
+const timer = ref(null);
 
 const shuffleList = () => {
-  return songs.value.sort(() => Math.random() - 0.5)
-}
+  let listCopy = songs.value;
+  listCopy.sort(() => Math.random() - 0.5);
+  songs.value = listCopy;
+};
 
-const mixingInterval = computed(() => inputVal.value * 1000)
+const mixingInterval = computed(() => inputVal.value * 1000);
 
 const turnOnMixing = () => {
-  clearInterval(timer.value)
+  clearInterval(timer.value);
   if (isShuffling.value) {
     timer.value = setInterval(() => {
-      shuffleList()
-    }, mixingInterval.value)
+      shuffleList();
+    }, mixingInterval.value);
   }
-}
+};
 
 const handleMixing = () => {
   if (inputVal.value <= 0) {
-    alert('Incorrect interval')
-    return
+    alert('Incorrect interval');
+    return;
   }
-  isShuffling.value = !isShuffling.value
-  turnOnMixing()
-}
+  isShuffling.value = !isShuffling.value;
+  turnOnMixing();
+};
 </script>
 
 <template>
-  <ol class="songs-container flex flex-col gap-2 p-5 border-2 border-black">
+  <ul class="songs-container flex flex-col gap-2 p-5 border-2 border-black">
     <li class="song-name" v-for="song in songs">
       {{ song }}
     </li>
-  </ol>
+  </ul>
   <input
     v-model="inputVal"
     :disabled="isShuffling"
